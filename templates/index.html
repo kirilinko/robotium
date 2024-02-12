@@ -1,13 +1,66 @@
 <!doctype html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
-</head>
-<body>
-  <div class="prose">
-    IREISLAMQ
-  </div>
-</body>
+<html data-theme="light" class="bg-white">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+   </head>
+   <body class="bg-white" style="font-family: Kanit">
+      <!-- ====== Navbar Section -->
+      <header>
+         <nav>
+            <div class="navbar bg-base-100">
+               <div class="navbar-start">
+                  <div class="dropdown">
+                     <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                        </svg>
+                     </div>
+                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a class="text-lg" >Acceuil</a></li>
+                        <li><a class="text-lg" >A propos</a></li>
+                        <li><a class="text-lg">Inscription</a></li>
+                     </ul>
+                  </div>
+                  <span class="text-2xl uppercase font-medium ">Robotium </span>
+               </div>
+               <div class="navbar-center hidden lg:flex">
+                  <ul class="menu menu-horizontal px-1">
+                     <li><a class="text-lg" >Acceuil</a></li>
+                     <li><a class="text-lg" >A propos</a></li>
+                     <li><a class="text-lg">Inscription</a></li>
+                  </ul>
+               </div>
+               <div class="navbar-end">
+                  <a class="btn bg-green-500 text-white text-lg hover:bg-green-600 font-medium ">Connexion</a>
+               </div>
+            </div>
+         </nav>
+      </header>
+      <section class="pt-20 flex items-center justify-center bg-white container mx-auto"  >
+         <div class="grid grid-cols-3 gap-3 bg-white">
+            <div class="col-span-2">
+               <div class="mx-auto max-w-[80rem]">
+                  <div class="text-center">
+                     <p class="text-lg font-medium leading-8 text-indigo-600/95">Plateforme de location de matériel électronique</p>
+                     <h1 class="mt-3 text-[3.5rem] font-bold leading-[4rem] tracking-tight text-black">Streamer l'exécution de votre code sur des plaquettes électroniques très facilement. </h1>
+                     <p class="mt-3 text-lg leading-relaxed text-slate-400">Robotium vous aide en vous louant du matériel électronique pour exécuter vos codes et effectué vos tests de façon simple et aisé.</p>
+                  </div>
+                  <div class="mt-6 flex items-center justify-center gap-4">
+                     <a href="#" class="transform rounded-md bg-indigo-600/95 px-5 py-3 font-medium text-white transition-colors hover:bg-indigo-700">Essayer maintenant</a>
+                     <a href="#" class="transform rounded-md border border-slate-200 px-5 py-3 font-medium text-slate-900 transition-colors hover:bg-slate-50"> En savoir plus </a>
+                  </div>
+               </div>
+            </div>
+            <div>
+               <img src="{{ url_for('static', filename='img/pngwing.com.png') }}">
+            </div>
+         </div>
+      </section>
+   </body>
+   <script src="https://cdn.tailwindcss.com"></script>
 </html>
