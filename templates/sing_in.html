@@ -1,0 +1,36 @@
+{% extends "./Models/model_singIn_singUp.html" %}
+
+   {% block title %} Connexion {% endblock %}
+
+   {% block content %}
+
+   <section class="pt-20 flex items-center justify-center bg-white container mx-auto">
+      <div class=" rounded-lg shadow-xl artboard artboard-horizontal phone-1 bg-gray-100">
+
+         <div class="pt-3 text-center text-3xl font-bold"> <h3> <i class="fas fa-lock"></i> Connexion Robotarium</h3> </div>
+
+         <div id="formlaire" class="pr-8 pl-8">
+
+            <div class="pb-8 pt-8">
+               <label class="input input-bordered flex items-center gap-2"> Email
+                  <input type="text" name="email" class="grow" placeholder="monmail@projetrobotium.com" />
+               </label>
+            </div>
+
+            <div class="pb-8">
+               <label class="input input-bordered flex items-center gap-2"> Mot de passe
+                  <input type="password" name="password"  class="grow" placeholder="**********" />
+               </label>
+            </div>
+
+            <div>
+               <button class="btn bg-blue-900 text-white text-lg hover:bg-green-600 font-medium">se connecter <i class="fas fa-check-circle"></i> </button>
+            </div>
+
+         </div>
+
+      </div>
+
+   </section>
+
+   {% endblock %}

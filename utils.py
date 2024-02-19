@@ -13,7 +13,7 @@ def upload_image(file):
 
     FILE_SIZE = 2 * 1024 * 1024
 
-    if file.filename and allowed_file(file.filename) :
+    if file.filename and allowed_file(file.filename):
 
         if file.content_length < FILE_SIZE:
 
@@ -61,7 +61,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
             flash('Vous devez être connecté pour accéder à cette page.', 'warning')
-            return redirect(url_for('sign_in'))
+            return redirect(url_for('sing_in'))
         return f(*args, **kwargs)
     return decorated_function
 

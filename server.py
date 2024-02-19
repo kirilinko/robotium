@@ -7,7 +7,7 @@ from utils import generate_frames, upload_image, login_required, admin_required
 from flask import Flask, render_template, jsonify, request, Response, redirect, url_for, session
 
 app = Flask(__name__)
-
+app.secret_key = 'Franck2024'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:1999@localhost:5432/flasktest"
 db = SQLAlchemy(app)
@@ -34,7 +34,7 @@ def sing_up():
         return jsonify(result)
 
     if request.method == 'GET':
-        return render_template('sing_in.html')
+        return render_template('sing_up.html')
 
 
 @app.route("/connexion", methods=['POST', 'GET'])
@@ -63,19 +63,19 @@ def sing_in():
         return render_template('sing_in.html')
 
 
-@app.route('/deconnexion', methods=['POST'])
+@app.route('/deconnexion', methods=['GET'])
 @login_required
 def logout():
     session.pop('user_id', None)
     session.pop('user_type', None)
-    return redirect(url_for('sign_in'))
+    return redirect(url_for('sing_in'))
 
 
 @app.route("/user/new/reservations", methods=['POST', 'GET'])
-@login_required
+#@login_required
 def new_reservations():
     if request.method == "GET":
-        return render_template('sing_up.html')
+        return render_template('user/makeReservation.html')
 
     if request.method == "POST":
 
@@ -89,14 +89,14 @@ def new_reservations():
         if result.status is True:
             return redirect('user/reservations')
         else:
-            return render_template('sing_up.html', data=result)
+            return render_template('user/makeReservation.html', data=result)
 
 
 @app.route("/user/reservations", methods=['GET'])
 @login_required
 def reservations():
     list_reservation = user.UserModel.reservations
-    return render_template('sing_up.html', data=list_reservation)
+    return render_template('user/myReservations.html', data=list_reservation)
 
 
 @app.route("/user/reservations/<int:id_reservation>", methods=['GET'])
@@ -104,7 +104,7 @@ def reservations():
 def reservation(id_reservation):
     reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
     if reservation_info:
-        return render_template('sing_up.html', data=reservation_info)
+        return render_template('user/codeStream.html', data=reservation_info)
     else:
         return render_template('404.html')
 
