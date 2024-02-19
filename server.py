@@ -88,7 +88,7 @@ def reservations():
 @login_required
 def reservation(id_reservation):
     reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
-    if id_reservation:
+    if reservation_info:
         return render_template('sing_up.html', data=reservation_info)
     else:
         return render_template('404.html')
@@ -102,11 +102,35 @@ def admin_reservations():
     return render_template('sing_up.html', data=all_reservations)
 
 
-@app.route("/admin/reservations/edit/<int:id_reservation>", methods=['PUT', 'GET'])
+@app.route("/admin/reservations/edit/<int:id_reservation>", methods=['POST', 'GET'])
 @login_required
 @admin_required
-def edit():
-    return render_template('sing_up.html')
+def edit(id_reservation):
+
+    reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation)
+    if reservation_info:
+
+        if request.method == "GET":
+
+            return render_template('sing_up.html', data=reservation_info)
+
+        if request.method == "POST":
+
+            file = request.files['schema_board']
+            result = upload_image(file)
+
+            if result.status is True:
+
+                reservation_info.schemas_board = result['path']
+                db.session.commit()
+
+            else:
+                return render_template('sing_up.html', data=reservation_info, info=result)
+
+        return render_template('sing_up.html')
+
+    else:
+        return render_template('404.html')
 
 
 @app.route('/send_code', methods=['POST'])

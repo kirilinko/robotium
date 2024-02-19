@@ -18,7 +18,7 @@ def upload_image(file):
         if file.content_length < FILE_SIZE:
 
             filename = secure_filename(file.filename)
-            filepath = os.path.join('fichiers', filename)
+            filepath = os.path.join('Fichiers', filename)
 
             file.save(filepath)
 
