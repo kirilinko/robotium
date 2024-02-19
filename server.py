@@ -74,7 +74,22 @@ def logout():
 @app.route("/user/new/reservations", methods=['POST', 'GET'])
 @login_required
 def new_reservations():
-    return render_template('sing_up.html')
+    if request.method == "GET":
+        return render_template('sing_up.html')
+
+    if request.method == "POST":
+
+        date_deb = request.form.get('date_deb')
+        date_fin = request.form.get('date_fin')
+        description = request.form.get('description')
+
+        new_reservation = reservation.ReservationModel(date_deb=date_deb, date_fin=date_fin, description=description, schemas_board=" ", status="En traitement", information="")
+        result = new_reservation.create()
+
+        if result.status is True:
+            return redirect('user/reservations')
+        else:
+            return render_template('sing_up.html', data=result)
 
 
 @app.route("/user/reservations", methods=['GET'])
@@ -115,17 +130,27 @@ def edit(id_reservation):
             return render_template('sing_up.html', data=reservation_info)
 
         if request.method == "POST":
+            # if is to upload schema_board
+            if request.form.get('btn_schema_board'):
+                file = request.files['schema_board']
+                result = upload_image(file)
 
-            file = request.files['schema_board']
-            result = upload_image(file)
+                if result.status is True:
 
-            if result.status is True:
+                    reservation_info.schemas_board = result['path']
+                    db.session.commit()
 
-                reservation_info.schemas_board = result['path']
+                else:
+                    return render_template('sing_up.html', data=reservation_info, info=result)
+
+            #if is to edit status reservation
+            if request.form.get('btn_status'):
+                status = request.form.get('status')
+                information = request.form.get('information')
+
+                reservation_info.status = status
+                reservation_info.information = information
                 db.session.commit()
-
-            else:
-                return render_template('sing_up.html', data=reservation_info, info=result)
 
         return render_template('sing_up.html')
 
