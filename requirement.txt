@@ -1,1 +1,6 @@
 Flask==3.0.2
+psycopg2==2.9.9
+Flask-SQLAlchemy===3.1.1
+Flask-Migrate==2.5.2
+pyserial==3.5
+opencv-python==4.9.0.80
