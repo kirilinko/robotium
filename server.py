@@ -71,7 +71,7 @@ def logout():
     return redirect(url_for('sing_in'))
 
 
-@app.route("/user/new/reservations", methods=['POST', 'GET'])
+@app.route("/user/reservations/new", methods=['POST', 'GET'])
 #@login_required
 def new_reservations():
     if request.method == "GET":
@@ -93,44 +93,46 @@ def new_reservations():
 
 
 @app.route("/user/reservations", methods=['GET'])
-@login_required
+#@login_required
 def reservations():
     list_reservation = user.UserModel.reservations
     return render_template('user/myReservations.html', data=list_reservation)
 
 
 @app.route("/user/reservations/<int:id_reservation>", methods=['GET'])
-@login_required
+#@login_required
 def reservation(id_reservation):
-    reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
-    if reservation_info:
-        return render_template('user/codeStream.html', data=reservation_info)
-    else:
-        return render_template('404.html')
+    #reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
+    #if reservation_info:
+     #   return render_template('user/codeStream.html', data=reservation_info)
+    #else:
+        return render_template('user/codeStream.html')
 
 
 @app.route("/admin/reservations", methods=['GET'])
-@login_required
-@admin_required
+#@login_required
+#@admin_required
 def admin_reservations():
-    all_reservations = reservation.ReservationModel.query.all()
-    return render_template('sing_up.html', data=all_reservations)
-
+    #all_reservations = reservation.ReservationModel.query.all()
+    #return render_template('sing_up.html', data=all_reservations)
+    return render_template('/admin/reservations.html')
 
 @app.route("/admin/reservations/edit/<int:id_reservation>", methods=['POST', 'GET'])
-@login_required
-@admin_required
+#@login_required
+#@admin_required
 def edit(id_reservation):
 
-    reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation)
-    if reservation_info:
+    #reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation)
+    #if reservation_info:
 
         if request.method == "GET":
+            #return render_template('admin/reservationEdite.html', data=reservation_info)
+            return render_template('admin/reservationEdite.html')
 
-            return render_template('sing_up.html', data=reservation_info)
 
         if request.method == "POST":
             # if is to upload schema_board
+            reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation)
             if request.form.get('btn_schema_board'):
                 file = request.files['schema_board']
                 result = upload_image(file)
@@ -154,8 +156,8 @@ def edit(id_reservation):
 
         return render_template('sing_up.html')
 
-    else:
-        return render_template('404.html')
+    #else:
+     #   return render_template('404.html')
 
 
 @app.route('/send_code', methods=['POST'])
@@ -184,7 +186,7 @@ def send_code():
 
 
 @app.route('/video')
-@login_required
+#@login_required
 def video():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
