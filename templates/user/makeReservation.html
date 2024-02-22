@@ -4,64 +4,68 @@
 
    {% block content %}
 
+   {% if data is defined and not data.status %}
+      <div class="w-full text-center">
+            <span class=" py-3 px-3 bg-red-500 text-white text-center hover:bg-gray-800">{{data.message}}</span>
+      </div>
+   {% endif %}
+
    <section class="pt-5 flex items-center justify-center bg-white container mx-auto">
 
       <div class=" rounded-lg shadow-xl artboard artboard-horizontal phone-2 bg-gray-100 h-100">
 
          <div id="formlaire" class="pr-8 pl-8">
-
-            <div class="pb-4 pt-8">
-               <div class="grid grid-cols-2">
-                  <div>
-                     <div class="label">
-                         <span class="label-text">Titre de votre projet</span>
+            <form method="POST" action="{{url_for('new_reservations')}}">
+               <div class="pb-4 pt-8">
+                  <div class="grid grid-cols-2">
+                     <div>
+                        <div class="label">
+                            <span class="label-text">Titre de votre projet</span>
+                        </div>
+                        <input type="text" name="titre" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
                      </div>
-                     <input type="text" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
-                  </div>
 
-                  <div class="pl-2">
-                     <div class="label">
-                         <span class="label-text">Date expérimental</span>
+                     <div class="pl-2">
+                        <div class="label">
+                            <span class="label-text">Date expérimental</span>
+                        </div>
+                        <input type="date" name="date" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
                      </div>
-                     <input type="date" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
                   </div>
-
                </div>
 
-            </div>
-
-            <div class="pb-4">
-               <div class="grid grid-cols-2">
-                  <div>
-                     <div class="label">
-                         <span class="label-text">Heure début</span>
+               <div class="pb-4">
+                  <div class="grid grid-cols-2">
+                     <div>
+                        <div class="label">
+                            <span class="label-text">Heure début</span>
+                        </div>
+                        <input type="time" name="heure_deb" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
                      </div>
-                     <input type="time" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
-                  </div>
 
-                  <div class="pl-2">
-                     <div class="label">
-                         <span class="label-text">Heure fin</span>
+                     <div class="pl-2">
+                        <div class="label">
+                            <span class="label-text">Heure fin</span>
+                        </div>
+                        <input type="time" name="heure_fin" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
                      </div>
-                     <input type="time" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+
                   </div>
-
                </div>
-            </div>
 
-            <div class="pb-6">
-               <div class="label">
-                   <span class="label-text">Description du projet</span>
+               <div class="pb-6">
+                  <div class="label">
+                      <span class="label-text">Description du projet</span>
+                  </div>
+                       <textarea name="descriptions" class="textarea textarea-bordered h-24" cols="70" placeholder="Bio"></textarea>
                </div>
-                    <textarea class="textarea textarea-bordered h-24" cols="70" placeholder="Bio"></textarea>
-            </div>
 
-            <div>
-               <button class="btn bg-blue-900 text-white text-lg hover:bg-green-600 font-medium">Soumettre <i class="fas fa-check-circle"></i></button>
-            </div>
+               <div>
+                  <button class="btn bg-blue-900 text-white text-lg hover:bg-green-600 font-medium">Soumettre <i class="fas fa-check-circle"></i></button>
+               </div>
+            </form>
 
          </div>
-
       </div>
 
    </section>

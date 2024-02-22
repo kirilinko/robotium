@@ -1,48 +1,59 @@
 from server import db
-from datetime import datetime
+from datetime import datetime, timedelta, time
 from sqlalchemy.exc import IntegrityError
 
 class ReservationModel(db.Model):
     __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
-    date_deb = db.Column(db.DateTime)
-    date_fin = db.Column(db.DateTime)
-    description = db.Column(db.String())
+    date = db.Column(db.Date)
+    heure_deb = db.Column(db.Time)
+    heure_fin = db.Column(db.Time)
+    titre = db.Column(db.String())
+    descriptions = db.Column(db.String())
     schemas_board = db.Column(db.String())
     status = db.Column(db.String())
     information = db.Column(db.String())
     id_user = db.Column(db.Integer, db.ForeignKey('users.id'))
     composants_reservation = db.relationship('ComposantReservationModel', backref='reservation', lazy=True)
 
-    def create(self):
+    def create(self, id_user):
 
-        if self.date_deb < datetime.utcnow() and self.date_deb < self.date_fin:
+        currentTime = datetime.utcnow()
+        self.heure_deb = datetime.combine(currentTime.date(), self.heure_deb)
+        self.heure_fin = datetime.combine(currentTime.date(), self.heure_fin)
+        self.id_user = id_user
 
-            if self.description and len(self.description) > 50:
+        if self.date >= currentTime.date() and (self.heure_fin - self.heure_deb <= timedelta(hours=1)):
 
-                try:
-                    db.session.add(self)
-                    db.session.commit()
-                    message = "Réservation éffectuée avec succès"
-                    status = True
+            if self.descriptions and len(self.descriptions) > 50:
 
-                except IntegrityError as e:
-                    db.session.rollback()
-                    message = f"Un erreur liée  à l'intégrité de la base de donnée {e}"
+                if self.titre and len(self.titre) > 5:
+
+                    try:
+                        db.session.add(self)
+                        db.session.commit()
+                        message = "Réservation éffectuée avec succès"
+                        status = True
+
+                    except IntegrityError as e:
+                        db.session.rollback()
+                        message = f"Un erreur liée  à l'intégrité de la base de donnée {e}"
+                        status = False
+
+                    except Exception as e:
+                        db.session.rollback()
+                        message = f" Une erreur est survenue lors de la création de la réservation {e}"
+                        status = False
+                else:
+                    message = "Le titre doit contenir au moin 5 caractères"
                     status = False
-
-                except Exception as e:
-                    db.session.rollback()
-                    message = f" Une erreur est survenue lors de la création de la réservation {e}"
-                    status = False
-
             else:
                 message = "La description doit faire au minimum 50 caractères"
                 status = False
 
         else:
-            message = "La date de début doit être supérieur à celle du jour et inférieur  à la date de fin"
+            message = "La date de début doit être supérieur à celle du jour et inférieur  à la date de fin et heure"
             status = False
 
         return {"message": message, "status": status}
@@ -53,3 +64,17 @@ class ReservationModel(db.Model):
 
         return self.composants_reservation
 
+    @staticmethod
+    def verify_date_time(date, heure_deb, heure_fin):
+        if date and heure_deb and heure_fin:
+            date_reservation = datetime.strptime(date, '%Y-%m-%d').date()
+            heure_deb = datetime.strptime(heure_deb, '%H:%M').time()
+            heure_fin = datetime.strptime(heure_fin, '%H:%M').time()
+            status = True
+            message = None
+        else:
+            status = False
+            date_reservation = heure_deb = heure_fin = None
+            message = "Tous les champs doivent être remplis"
+        return {"date_reservation": date_reservation, "heure_deb": heure_deb, "heure_fin": heure_fin,
+                "message": message, "status": status}

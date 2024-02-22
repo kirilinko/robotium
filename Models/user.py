@@ -34,7 +34,7 @@ class UserModel(db.Model):
 
                     except IntegrityError as e:  # Gérer une exception plus spécifique
                         db.session.rollback()
-                        message = f"Une erreur d'intégrité est survenue lors de la création de l'utilisateur : {e}"
+                        message = f"Un utilisateur utilise déjà ce mail"
                         status = False
 
                     except Exception as e:

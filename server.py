@@ -1,8 +1,8 @@
 import os
-import datetime
 import subprocess
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime, timedelta, time
 from utils import generate_frames, upload_image, login_required, admin_required
 from flask import Flask, render_template, jsonify, request, Response, redirect, url_for, session
 
@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:1999@localhost:54
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from Models import user, reservation, composant, composant_reservation
+from Models import user as user_model, reservation as reservation_model, composant, composant_reservation
 
 
 @app.route("/")
@@ -28,10 +28,10 @@ def sing_up():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        new_user = user.UserModel(full_name=full_name, email=email, password=password, type_user='user')
+        new_user = user_model.UserModel(full_name=full_name, email=email, password=password, type_user='user')
         result = new_user.create()
 
-        return jsonify(result)
+        return render_template('sing_up.html', data=result)
 
     if request.method == 'GET':
         return render_template('sing_up.html')
@@ -43,16 +43,16 @@ def sing_in():
 
         email = request.form.get('email')
         password = request.form.get('password')
-        result = user.UserModel.login(email, password)
-
+        result = user_model.UserModel.login(email, password)
+        print(result)
         # check the authentication state and redirect to user or admin dashboard
 
-        if result.status is True:
+        if result['status'] is True:
 
-            session['user_id'] = result.user_id
-            session['user_type'] = result.user_type
+            session['user_id'] = result['user_id']
+            session['user_type'] = result['user_type']
 
-            if result.user_type == 'admin':
+            if result['user_type'] == 'admin':
                 return redirect(url_for('admin_reservations'))
             else:
                 return redirect(url_for('reservations'))
@@ -72,31 +72,48 @@ def logout():
 
 
 @app.route("/user/reservations/new", methods=['POST', 'GET'])
-#@login_required
+@login_required
 def new_reservations():
     if request.method == "GET":
         return render_template('user/makeReservation.html')
 
     if request.method == "POST":
 
-        date_deb = request.form.get('date_deb')
-        date_fin = request.form.get('date_fin')
-        description = request.form.get('description')
+        titre = request.form.get('titre')
+        date_reservation = request.form.get('date')
+        heure_deb = request.form.get('heure_deb')
+        heure_fin = request.form.get('heure_fin')
+        descriptions = request.form.get('descriptions')
 
-        new_reservation = reservation.ReservationModel(date_deb=date_deb, date_fin=date_fin, description=description, schemas_board=" ", status="En traitement", information="")
-        result = new_reservation.create()
+        result = reservation_model.ReservationModel.verify_date_time(date_reservation, heure_deb, heure_fin)
 
-        if result.status is True:
-            return redirect('user/reservations')
+        if result['status'] is True:
+
+            new_reservation = reservation_model.ReservationModel(date=result['date_reservation'], heure_deb=result['heure_deb'], heure_fin=result['heure_fin'], titre=titre, descriptions=descriptions, schemas_board=" ", status="En traitement", information="")
+            result = new_reservation.create(session['user_id'])
+
+            if result['status'] is True:
+                return redirect('user/reservations')
+            else:
+                return render_template('user/makeReservation.html', data=result)
         else:
             return render_template('user/makeReservation.html', data=result)
 
 
+
+
+
+
+
+
 @app.route("/user/reservations", methods=['GET'])
-#@login_required
+@login_required
 def reservations():
-    list_reservation = user.UserModel.reservations
-    return render_template('user/myReservations.html', data=list_reservation)
+    current_user = user_model.UserModel.query.filter_by(id=session['user_id']).first()
+
+    for reservationx in current_user.reservations:
+        print(reservationx.titre)
+    return render_template('user/myReservations.html', data=current_user.reservations)
 
 
 @app.route("/user/reservations/<int:id_reservation>", methods=['GET'])
