@@ -5,7 +5,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
        <title>{% block title %} {% endblock %} | Robotarium app</title>
       <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.0/dist/full.min.css" rel="stylesheet" type="text/css" />
-      <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -24,19 +24,19 @@
                      </div>
                      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                         <li><a href="{{ url_for('reservations') }}" class="text-lg" >Mes reservations</a></li>
-                        <li><a href="{{ url_for('new_reservations') }}" class="text-lg" >Nouvelle reservation</a></li>
+                        <li><a href="{{ url_for('new_reservations') }}" class="text-lg" > <i class="fas fa-plus"></i> Nouvelle reservation</a></li>
                      </ul>
                   </div>
                   <span class="text-2xl uppercase font-medium ">Robotarium </span>
                </div>
                <div class="navbar-center hidden lg:flex">
                   <ul class="menu menu-horizontal px-1">
-                     <li><a href="{{ url_for('reservations') }}" class="text-lg" >Mes reservations</a></li>
-                     <li><a href="{{ url_for('new_reservations') }}" class="text-lg" >Nouvelle reservation</a></li>
+                     <li><a href="{{ url_for('reservations') }}" class="text-lg" > <i class="fas fa-box-open"></i> Mes reservations</a></li>
+                     <li><a href="{{ url_for('new_reservations') }}" class="text-lg" > <i class="fas fa-plus"></i> Nouvelle reservation</a></li>
                   </ul>
                </div>
                <div class="navbar-end">
-                  <a href="{{ url_for('logout') }}" class="btn bg-green-500 text-white text-lg hover:bg-green-600 font-medium "><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+                  <a href="{{ url_for('logout') }}" class="btn bg-green-500 text-white text-lg hover:bg-green-600 font-medium "><i class="fas fa-power-off"></i> Deconnexion</a>
                </div>
             </div>
          </nav>

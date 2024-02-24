@@ -17,6 +17,18 @@ class ReservationModel(db.Model):
     id_user = db.Column(db.Integer, db.ForeignKey('users.id'))
     composants_reservation = db.relationship('ComposantReservationModel', backref='reservation', lazy=True)
 
+    @classmethod
+    def approved_reservations(cls):
+        return cls.query.filter_by(status="Approuvée").all()
+
+    @classmethod
+    def refus_reservations(cls):
+        return cls.query.filter_by(status="Refusé").all()
+
+    @classmethod
+    def pending_reservations(cls):
+        return cls.query.filter_by(status="En revue").all()
+
     def create(self, id_user):
 
         currentTime = datetime.utcnow()
@@ -53,7 +65,7 @@ class ReservationModel(db.Model):
                 status = False
 
         else:
-            message = "La date de début doit être supérieur à celle du jour et inférieur  à la date de fin et heure"
+            message = "La date de début doit être supérieur à celle du jour et l'intervalle de temps inférieur ou égale à 1h"
             status = False
 
         return {"message": message, "status": status}

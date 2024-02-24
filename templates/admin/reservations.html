@@ -8,83 +8,92 @@
 
          <div role="tablist" class="tabs tabs-bordered w-full">
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold " aria-label="En attente" checked />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold " style="width: 250px;" aria-label="En attente" checked />
 
             <div role="tabpanel" class="tab-content p-10">
 
-               <div class="card w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
+               {% if pending %}
 
-                           <div class="card-actions justify-end">
-                              <button class="btn bg-yellow-300 hover:bg-yellow-100">En traitement</button>
-                           </div>
-                        </div>
-                     </div>
-               </div>
+                  {% for obj in pending %}
+                       <div class="card w-90 bg-base-100 shadow-xl  mb-4 ">
+                             <div class="card-body bg-gray-100">
+                                <div class="grid grid-cols-4">
+                                   <div class="col-span-3">
+                                         <h2 class="card-title">{{ obj.titre }} || {{ obj.date.strftime('%d/%m/%Y') }} de {{ obj.heure_deb }} à {{ obj.heure_fin }}  </h2>
+                                         <p> {{ obj.descriptions }}</p>
+                                        <div class="text-end">Par {{ obj.user.full_name}} </div>
+                                   </div>
+                                   <div class="card-actions justify-end">
+                                      <a href="{{url_for('edit',id_reservation=obj.id)}}" class="btn bg-yellow-300 hover:bg-yellow-400" >Modifier</a>
+                                   </div>
+                                </div>
+                             </div>
+                       </div>
+                  {% endfor %}
 
+                {% else %}
+                    Aucune réservation dans la catégorie traitement
+                {% endif %}
 
-               <div class="card mt-8 w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
-
-                           <div class="card-actions justify-end">
-                              <button class="btn bg-red-300 hover:bg-red-100">Refusé</button>
-                           </div>
-                        </div>
-                     </div>
-               </div>
 
 
             </div>
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" aria-label="Accepté"  />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" style="width: 250px;" aria-label="Accepté"  />
 
             <div role="tabpanel" class="tab-content p-10">
 
-               <div class="card w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
+               {% if approuved %}
 
-                           <div class="card-actions justify-end">
-                              <a href="{{ url_for('reservation', id_reservation=15) }}" class="btn bg-green-300 hover:bg-green-100">Streamer mon code</a>
-                           </div>
-                        </div>
-                     </div>
-               </div>
+                  {% for obj in approuved %}
+                       <div class="card w-90 bg-base-100 shadow-xl  mb-4 ">
+                             <div class="card-body bg-gray-100">
+                                <div class="grid grid-cols-4">
+                                   <div class="col-span-3">
+                                         <h2 class="card-title">{{ obj.titre }} || {{ obj.date.strftime('%d/%m/%Y') }} de {{ obj.heure_deb }} à {{ obj.heure_fin }}  </h2>
+                                         <p> {{ obj.descriptions }}</p>
+                                        <div class="text-end">Par {{ obj.user.full_name}} </div>
+                                   </div>
+                                   <div class="card-actions justify-end">
+                                      <a href="{{url_for('edit',id_reservation=obj.id)}}" class=" text-white btn bg-green-500 hover:bg-blue-900" >Modifier</a>
+                                   </div>
+                                </div>
+                             </div>
+                       </div>
+                  {% endfor %}
+
+                {% else %}
+                    Aucune réservation dans la catégorie Accepté
+                {% endif %}
 
             </div>
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" aria-label="Refusé" />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" style="width: 250px;" aria-label="Refusé" />
 
             <div role="tabpanel" class="tab-content p-10">
 
-               <div class="card w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
+               {% if refused %}
 
-                           <div class="card-actions justify-end">
-                              <button class=" text-white btn bg-red-500 hover:bg-gray-800">Réservation expiré</button>
-                           </div>
-                        </div>
-                     </div>
-               </div>
+                  {% for obj in refused %}
+                       <div class="card w-90 bg-base-100 shadow-xl  mb-4 ">
+                             <div class="card-body bg-gray-100">
+                                <div class="grid grid-cols-4">
+                                   <div class="col-span-3">
+                                         <h2 class="card-title">{{ obj.titre }} || {{ obj.date.strftime('%d/%m/%Y') }} de {{ obj.heure_deb }} à {{ obj.heure_fin }}  </h2>
+                                         <p> {{ obj.descriptions }}</p>
+                                       <div class="text-end">Par {{ obj.user.full_name}} </div>
+                                   </div>
+                                   <div class="card-actions justify-end">
+                                      <a href="{{url_for('edit',id_reservation=obj.id)}}" class=" text-white btn bg-red-600 hover:bg-red-400" >Modifier</a>
+                                   </div>
+                                </div>
+                             </div>
+                       </div>
+                  {% endfor %}
+
+                {% else %}
+                    Aucune réservation dans la catégorie Refusé
+                {% endif %}
 
             </div>
          </div>

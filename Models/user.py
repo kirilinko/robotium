@@ -6,6 +6,9 @@ from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
+current_date = datetime.utcnow().date()
+current_time = datetime.utcnow().time()
+
 class UserModel(db.Model):
 
     __tablename__ = 'users'
@@ -61,18 +64,16 @@ class UserModel(db.Model):
 
 
     def R_traitement(self):
-        current_date = datetime.utcnow().date()
-        current_time = datetime.utcnow().time()
+
         return [reservation for reservation in self.reservations if reservation.date > current_date or (reservation.date == current_date and reservation.heure_deb > current_time )]
 
     def R_expirer(self):
-        current_date = datetime.utcnow().date()
-        return [reservation for reservation in self.reservations if reservation.date < current_date]
+
+        return [reservation for reservation in self.reservations if reservation.date < current_date or (reservation.date == current_date and reservation.heure_fin < current_time)]
 
     def R_cours(self):
-        current_date = datetime.utcnow().date()
-        current_time = datetime.utcnow().time()
-        return [reservation for reservation in self.reservations if reservation.date == current_date and reservation.heure_deb <= current_time <= reservation.heure_fin ]
+
+        return [reservation for reservation in self.reservations if reservation.date == current_date and reservation.status == "Approuvée" and reservation.heure_deb <= current_time <= reservation.heure_fin ]
 
 
     # Connexion d'un utilisateur

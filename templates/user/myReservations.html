@@ -8,21 +8,22 @@
 
          <div role="tablist" class="tabs tabs-bordered w-full">
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold " aria-label="En traitement" checked />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold " aria-label="En traitement" style="width: 250px;" checked />
 
             <div role="tabpanel" class="tab-content p-10">
             {% if traitement %}
 
               {% for obj in traitement %}
-                   <div class="card w-90 bg-base-100 shadow-xl">
+                   <div class="card w-90 bg-base-100 shadow-xl  mb-4 ">
                          <div class="card-body bg-gray-100">
                             <div class="grid grid-cols-4">
                                <div class="col-span-3">
-                                     <h2 class="card-title">{{ obj.titre }}</h2>
-                                     <p> desctoop {{ obj.heure_deb }} | {{ obj.heure_fin }}</p>
+                                     <h2 class="card-title">{{ obj.titre }}  </h2>
+                                     <p> {{ obj.descriptions }}</p>
+                                   <div class="text-end " >Pour le {{ obj.date.strftime('%d/%m/%Y') }} de {{ obj.heure_deb }} à {{ obj.heure_fin }}</div>
                                </div>
                                <div class="card-actions justify-end">
-                                  <button class="btn bg-yellow-300 hover:bg-yellow-100">{{ obj.status }}</button>
+                                  <button class="btn bg-yellow-300 hover:bg-yellow-400" >{{ obj.status }}</button>
                                </div>
                             </div>
                          </div>
@@ -37,22 +38,22 @@
 
             </div>
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" aria-label="En cours"  />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" style="width: 250px;" aria-label=" En cours"  />
 
             <div role="tabpanel" class="tab-content p-10">
 
                {% if en_cour %}
 
               {% for obj in en_cour %}
-                   <div class="card w-90 bg-base-100 shadow-xl">
+                   <div class="card w-90 bg-base-100 shadow-xl mb-4">
                          <div class="card-body bg-gray-100">
                             <div class="grid grid-cols-4">
                                <div class="col-span-3">
-                                     <h2 class="card-title">{{ obj.titre }}</h2>
-                                     <p>If a dog chews shoes whose shoes does he choose?</p>
+                                     <h2 class="card-title">{{ obj.titre }} || {{ obj.date.strftime('%d/%m/%Y') }} de {{ obj.heure_deb }} à {{ obj.heure_fin }}</h2>
+                                     <p>{{ obj.descriptions }}</p>
                                </div>
                                <div class="card-actions justify-end">
-                                  <a href="{{url_for('reservation',id_reservation=obj.id)}}" class="btn bg-yellow-300 hover:bg-yellow-100">En traitement</a>
+                                  <a href="{{url_for('reservation',id_reservation=obj.id)}}" class="btn bg-green-300 hover:bg-green-100">Streamer mon code</a>
                                </div>
                             </div>
                          </div>
@@ -65,22 +66,23 @@
 
             </div>
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" aria-label="Expiré" />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" style="width: 250px;" aria-label="Expiré" />
 
             <div role="tabpanel" class="tab-content p-10">
 
                {% if expirer %}
 
               {% for obj in expirer %}
-                   <div class="card w-90 bg-base-100 shadow-xl">
+                   <div class="card w-90 bg-base-100 shadow-xl  mb-4">
                          <div class="card-body bg-gray-100">
                             <div class="grid grid-cols-4">
                                <div class="col-span-3">
                                      <h2 class="card-title">{{ obj.titre }}</h2>
-                                     <p>If a dog chews shoes whose shoes does he choose?</p>
+                                     <p> {{ obj.descriptions }} </p>
+                                        <div class="text-end font-bold" > {{ obj.date.strftime('%d/%m/%Y') }} de {{ obj.heure_deb }} à {{ obj.heure_fin }}</div>
                                </div>
                                <div class="card-actions justify-end">
-                                  <button class="btn bg-yellow-300 hover:bg-yellow-100">En traitement</button>
+                                  <button class="text-white btn bg-red-500 hover:bg-red-100">Expirée</button>
                                </div>
                             </div>
                          </div>

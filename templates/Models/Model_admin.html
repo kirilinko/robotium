@@ -23,18 +23,18 @@
                         </svg>
                      </div>
                      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a href="{{ url_for('reservations') }}" class="text-lg" >Liste des reservations</a></li>
+                        <li><a href="{{ url_for('reservations') }}" class="text-lg" ><i class="fas fa-list"></i> Liste des reservations</a></li>
                      </ul>
                   </div>
                   <span class="text-2xl uppercase font-medium ">Robotarium </span>
                </div>
                <div class="navbar-center hidden lg:flex">
                   <ul class="menu menu-horizontal px-1">
-                     <li><a href="{{ url_for('admin_reservations') }}" class="text-lg" >Liste des reservations</a></li>
+                     <li><a href="{{ url_for('admin_reservations') }}" class="text-lg" > <i class="fas fa-list"></i> Liste des reservations</a></li>
                   </ul>
                </div>
                <div class="navbar-end">
-                  <a href="{{ url_for('logout') }}" class="btn bg-green-500 text-white text-lg hover:bg-green-600 font-medium "><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+                  <a href="{{ url_for('logout') }}" class="btn bg-green-500 text-white text-lg hover:bg-green-600 font-medium "> <i class="fas fa-power-off"></i> Deconnexion</a>
                </div>
             </div>
          </nav>

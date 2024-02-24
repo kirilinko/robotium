@@ -6,9 +6,38 @@
 
       <section class="pt-20 flex items-center justify-center bg-white container mx-auto">
 
+        <div class=" rounded-lg shadow-xl artboard artboard-horizontal phone-2 bg-gray-100">
 
-<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="small_size">Small file input</label>
-<input class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="small_size" type="file">
+         <div class=" text-center text-3xl font-bold"> <h3> Projet : {{data.titre}} ({{data.status}})</h3> </div>
+
+         <div id="formlaire" class="pr-8 pl-8">
+            <form method="POST" action="{{url_for('edit',id_reservation=data.id)}}">
+               <div class="pb-2 pt-4">
+                   <div class="label">
+                      <span class="label-text">Description du projet</span>
+                  </div>
+                  <textarea name="descriptions" class="textarea textarea-bordered h-24" cols="70" readonly>{{data.descriptions}}</textarea>
+               </div>
+
+               <div class="pb-8">
+                  <div class="label">
+                    <span class="label-text">Attribué un status  à la demande</span>
+                  </div>
+                  <select class="select select-bordered w-full" name="status" required>
+                    <option value=""></option>
+                    <option value="Approuvée" >Approuvée</option>
+                    <option value="Refusé">Refusé</option>
+
+                  </select>
+               </div>
+
+               <div>
+                  <button class="btn bg-blue-900 text-white text-lg hover:bg-green-600 font-medium">Modifier le status <i class="fas fa-check-circle"></i> </button>
+               </div>
+            </form>
+         </div>
+
+      </div>
 
 
       </section>

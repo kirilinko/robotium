@@ -63,6 +63,14 @@ def sing_in():
         return render_template('sing_in.html')
 
 
+@app.route("/create/admin", methods=['GET'])
+def create_admin():
+
+    new_user = user_model.UserModel(full_name="Admin Robotium", email="admin@robotium.com", password="00000000", type_user='admin')
+    result = new_user.create()
+    return ("Admin email : admin@robotium.com | mot de passe : 00000000")
+
+
 @app.route('/deconnexion', methods=['GET'])
 @login_required
 def logout():
@@ -89,11 +97,11 @@ def new_reservations():
 
         if result['status'] is True:
 
-            new_reservation = reservation_model.ReservationModel(date=result['date_reservation'], heure_deb=result['heure_deb'], heure_fin=result['heure_fin'], titre=titre, descriptions=descriptions, schemas_board=" ", status="En traitement", information="")
+            new_reservation = reservation_model.ReservationModel(date=result['date_reservation'], heure_deb=result['heure_deb'], heure_fin=result['heure_fin'], titre=titre, descriptions=descriptions, schemas_board=" ", status="En revue", information="")
             result = new_reservation.create(session['user_id'])
 
             if result['status'] is True:
-                return redirect('user/reservations')
+                return redirect(url_for('reservations'))
             else:
                 return render_template('user/makeReservation.html', data=result)
         else:
@@ -110,75 +118,63 @@ def reservations():
     en_cour= login_user.R_cours()
 
 
-    return render_template('user/myReservations.html', traitement=traitement,expirer=expirer,en_cour=en_cour,test=teset)
+    return render_template('user/myReservations.html', traitement=traitement,expirer=expirer,en_cour=en_cour)
 
 
 @app.route("/user/reservations/<int:id_reservation>", methods=['GET'])
 @login_required
 def reservation(id_reservation):
-    #reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
-    #if reservation_info:
-     #   return render_template('user/codeStream.html', data=reservation_info)
-    #else:
-        return render_template('user/codeStream.html')
+    current_time = datetime.utcnow().time()
+    reservation_info = reservation_model.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
+    if reservation_info:
+        return render_template('user/codeStream.html', data=reservation_info, heure=current_time)
+    else:
+        return ('Ressource Non accessible'),403
 
 
 @app.route("/admin/reservations", methods=['GET'])
-#@login_required
-#@admin_required
+@login_required
+@admin_required
 def admin_reservations():
-    #all_reservations = reservation.ReservationModel.query.all()
-    #return render_template('sing_up.html', data=all_reservations)
-    return render_template('/admin/reservations.html')
+    approuved=reservation_model.ReservationModel.approved_reservations()
+    refused = reservation_model.ReservationModel.refus_reservations()
+    pending = reservation_model.ReservationModel.pending_reservations()
+    return render_template('/admin/reservations.html', approuved=approuved, refused=refused, pending=pending)
 
 @app.route("/admin/reservations/edit/<int:id_reservation>", methods=['POST', 'GET'])
-#@login_required
-#@admin_required
+@login_required
+@admin_required
 def edit(id_reservation):
 
-    #reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation)
-    #if reservation_info:
+    reservation_info = reservation_model.ReservationModel.query.filter_by(id=id_reservation).first()
+
+    if reservation_info:
 
         if request.method == "GET":
-            #return render_template('admin/reservationEdite.html', data=reservation_info)
-            return render_template('admin/reservationEdite.html')
-
+            return render_template('admin/reservationEdite.html', data=reservation_info)
 
         if request.method == "POST":
-            # if is to upload schema_board
-            reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation)
-            if request.form.get('btn_schema_board'):
-                file = request.files['schema_board']
-                result = upload_image(file)
 
-                if result.status is True:
+            status = request.form.get('status')
 
-                    reservation_info.schemas_board = result['path']
-                    db.session.commit()
-
-                else:
-                    return render_template('sing_up.html', data=reservation_info, info=result)
-
-            #if is to edit status reservation
-            if request.form.get('btn_status'):
-                status = request.form.get('status')
-                information = request.form.get('information')
+            if status and status in ['Approuvée','Refusé'] :
 
                 reservation_info.status = status
-                reservation_info.information = information
                 db.session.commit()
+                return redirect(url_for('admin_reservations'))
+            else:
+                return render_template('admin/reservationEdite.html', error="Le status doit être Approuvée ou Refusé")
 
-        return render_template('sing_up.html')
 
-    #else:
-     #   return render_template('404.html')
+    else:
+        return render_template('404.html')
 
 
 @app.route('/send_code', methods=['POST'])
-@login_required
 def send_code():
     code = request.data.decode('utf-8')
-    now = datetime.datetime.now()
+    #code = request.json.get('code')
+    now = datetime.now()
     file_name = now.strftime("%Y-%m-%d_%H-%M-%S")
     file_path = f"{file_name}.ino"
 
@@ -187,17 +183,15 @@ def send_code():
 
     sketch_path = os.path.join(os.getcwd(), file_path)
 
-    # compile and upload code file with arduino-cli no the board
-
     try:
         subprocess.run(['arduino-cli', 'compile', '--upload', sketch_path, '--port', 'COM6', '--fqbn',
                         'arduino:avr:uno'], check=True)
-        return jsonify({"message": "Code en cours d'execusion", "status": True}), 200
+        return jsonify({"message": "Execution du code", "status": True}), 200
     except subprocess.CalledProcessError as e:
-        return jsonify({"message": "Erreur lors de la soumission du code", "status": False}), 500
+        error_message = e.stderr.decode() if e.stderr else 'Erreur sans sortie d\'erreur'
+        return jsonify({"message": "Erreur lors de la soumission du code "+ error_message, "status": False}), 500
     finally:
-        os.remove(sketch_path)  # Nettoyer le fichier  créé
-
+        os.remove(sketch_path)
 
 @app.route('/video')
 #@login_required
