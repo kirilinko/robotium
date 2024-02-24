@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 76030d64e062
+Revision ID: cb49a343923f
 Revises: 
-Create Date: 2024-02-17 23:19:30.906764
+Create Date: 2024-02-23 14:16:40.476611
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '76030d64e062'
+revision = 'cb49a343923f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,15 +30,19 @@ def upgrade():
     sa.Column('email', sa.String(), nullable=True),
     sa.Column('password', sa.String(), nullable=True),
     sa.Column('type_user', sa.String(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email')
     )
     op.create_table('reservations',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('date_deb', sa.DateTime(), nullable=True),
-    sa.Column('date_fin', sa.DateTime(), nullable=True),
-    sa.Column('description', sa.String(), nullable=True),
+    sa.Column('date', sa.Date(), nullable=True),
+    sa.Column('heure_deb', sa.Time(), nullable=True),
+    sa.Column('heure_fin', sa.Time(), nullable=True),
+    sa.Column('titre', sa.String(), nullable=True),
+    sa.Column('descriptions', sa.String(), nullable=True),
     sa.Column('schemas_board', sa.String(), nullable=True),
-    sa.Column('code_to_execute', sa.String(), nullable=True),
+    sa.Column('status', sa.String(), nullable=True),
+    sa.Column('information', sa.String(), nullable=True),
     sa.Column('id_user', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['id_user'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')

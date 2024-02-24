@@ -1,5 +1,6 @@
 import re
 from server import db
+from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.security import check_password_hash
@@ -58,12 +59,23 @@ class UserModel(db.Model):
 
     # Liste des réservation d'un utilisateur
 
-    def get_reservation(self):
 
-        return self.reservations
+    def R_traitement(self):
+        current_date = datetime.utcnow().date()
+        current_time = datetime.utcnow().time()
+        return [reservation for reservation in self.reservations if reservation.date > current_date or (reservation.date == current_date and reservation.heure_deb > current_time )]
+
+    def R_expirer(self):
+        current_date = datetime.utcnow().date()
+        return [reservation for reservation in self.reservations if reservation.date < current_date]
+
+    def R_cours(self):
+        current_date = datetime.utcnow().date()
+        current_time = datetime.utcnow().time()
+        return [reservation for reservation in self.reservations if reservation.date == current_date and reservation.heure_deb <= current_time <= reservation.heure_fin ]
+
 
     # Connexion d'un utilisateur
-
     @staticmethod
     def validate_email(email):
         if re.match(r"[^@]+@[^@]+\.[^@]+", email):

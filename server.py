@@ -100,24 +100,21 @@ def new_reservations():
             return render_template('user/makeReservation.html', data=result)
 
 
-
-
-
-
-
-
 @app.route("/user/reservations", methods=['GET'])
 @login_required
 def reservations():
-    current_user = user_model.UserModel.query.filter_by(id=session['user_id']).first()
+    login_user = user_model.UserModel.query.filter_by(id=session['user_id']).first()
 
-    for reservationx in current_user.reservations:
-        print(reservationx.titre)
-    return render_template('user/myReservations.html', data=current_user.reservations)
+    traitement =login_user.R_traitement()
+    expirer = login_user.R_expirer()
+    en_cour= login_user.R_cours()
+
+
+    return render_template('user/myReservations.html', traitement=traitement,expirer=expirer,en_cour=en_cour,test=teset)
 
 
 @app.route("/user/reservations/<int:id_reservation>", methods=['GET'])
-#@login_required
+@login_required
 def reservation(id_reservation):
     #reservation_info = reservation.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
     #if reservation_info:

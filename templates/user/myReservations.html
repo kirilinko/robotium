@@ -11,37 +11,28 @@
             <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold " aria-label="En traitement" checked />
 
             <div role="tabpanel" class="tab-content p-10">
+            {% if traitement %}
 
-               <div class="card w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
+              {% for obj in traitement %}
+                   <div class="card w-90 bg-base-100 shadow-xl">
+                         <div class="card-body bg-gray-100">
+                            <div class="grid grid-cols-4">
+                               <div class="col-span-3">
+                                     <h2 class="card-title">{{ obj.titre }}</h2>
+                                     <p> desctoop {{ obj.heure_deb }} | {{ obj.heure_fin }}</p>
+                               </div>
+                               <div class="card-actions justify-end">
+                                  <button class="btn bg-yellow-300 hover:bg-yellow-100">{{ obj.status }}</button>
+                               </div>
+                            </div>
+                         </div>
+                   </div>
+              {% endfor %}
 
-                           <div class="card-actions justify-end">
-                              <button class="btn bg-yellow-300 hover:bg-yellow-100">En traitement</button>
-                           </div>
-                        </div>
-                     </div>
-               </div>
+                {% else %}
+                    Aucune réservation dans la catégorie traitement
+                {% endif %}
 
-
-               <div class="card mt-8 w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
-
-                           <div class="card-actions justify-end">
-                              <button class="btn bg-red-300 hover:bg-red-100">Refusé</button>
-                           </div>
-                        </div>
-                     </div>
-               </div>
 
 
             </div>
@@ -50,20 +41,27 @@
 
             <div role="tabpanel" class="tab-content p-10">
 
-               <div class="card w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
+               {% if en_cour %}
 
-                           <div class="card-actions justify-end">
-                              <a href="{{ url_for('reservation', id_reservation=15) }}" class="btn bg-green-300 hover:bg-green-100">Streamer mon code</a>
-                           </div>
-                        </div>
-                     </div>
-               </div>
+              {% for obj in en_cour %}
+                   <div class="card w-90 bg-base-100 shadow-xl">
+                         <div class="card-body bg-gray-100">
+                            <div class="grid grid-cols-4">
+                               <div class="col-span-3">
+                                     <h2 class="card-title">{{ obj.titre }}</h2>
+                                     <p>If a dog chews shoes whose shoes does he choose?</p>
+                               </div>
+                               <div class="card-actions justify-end">
+                                  <a href="{{url_for('reservation',id_reservation=obj.id)}}" class="btn bg-yellow-300 hover:bg-yellow-100">En traitement</a>
+                               </div>
+                            </div>
+                         </div>
+                   </div>
+              {% endfor %}
+
+                {% else %}
+                    Aucune réservation dans la catégorie en cours
+                {% endif %}
 
             </div>
 
@@ -71,20 +69,27 @@
 
             <div role="tabpanel" class="tab-content p-10">
 
-               <div class="card w-90 bg-base-100 shadow-xl">
-                     <div class="card-body bg-gray-100">
-                        <div class="grid grid-cols-4">
-                           <div class="col-span-3">
-                                 <h2 class="card-title">Card title!</h2>
-                                 <p>If a dog chews shoes whose shoes does he choose?</p>
-                           </div>
+               {% if expirer %}
 
-                           <div class="card-actions justify-end">
-                              <button class=" text-white btn bg-red-500 hover:bg-gray-800">Réservation expiré</button>
-                           </div>
-                        </div>
-                     </div>
-               </div>
+              {% for obj in expirer %}
+                   <div class="card w-90 bg-base-100 shadow-xl">
+                         <div class="card-body bg-gray-100">
+                            <div class="grid grid-cols-4">
+                               <div class="col-span-3">
+                                     <h2 class="card-title">{{ obj.titre }}</h2>
+                                     <p>If a dog chews shoes whose shoes does he choose?</p>
+                               </div>
+                               <div class="card-actions justify-end">
+                                  <button class="btn bg-yellow-300 hover:bg-yellow-100">En traitement</button>
+                               </div>
+                            </div>
+                         </div>
+                   </div>
+              {% endfor %}
+
+                {% else %}
+                    Aucune réservation dans la catégorie expirée
+                {% endif %}
 
             </div>
          </div>

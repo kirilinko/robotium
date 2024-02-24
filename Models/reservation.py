@@ -20,8 +20,8 @@ class ReservationModel(db.Model):
     def create(self, id_user):
 
         currentTime = datetime.utcnow()
-        self.heure_deb = datetime.combine(currentTime.date(), self.heure_deb)
-        self.heure_fin = datetime.combine(currentTime.date(), self.heure_fin)
+        self.heure_deb = datetime.combine(self.date, self.heure_deb)
+        self.heure_fin = datetime.combine(self.date, self.heure_fin)
         self.id_user = id_user
 
         if self.date >= currentTime.date() and (self.heure_fin - self.heure_deb <= timedelta(hours=1)):
@@ -60,9 +60,6 @@ class ReservationModel(db.Model):
 
     #Conposant réservé
 
-    def get_composants_reservation(self):
-
-        return self.composants_reservation
 
     @staticmethod
     def verify_date_time(date, heure_deb, heure_fin):
