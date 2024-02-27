@@ -4,3 +4,4 @@ Flask-SQLAlchemy===3.1.1
 Flask-Migrate==2.5.2
 pyserial==3.5
 opencv-python==4.9.0.80
+pytz==2024.1

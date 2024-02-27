@@ -1,4 +1,5 @@
 import re
+import pytz
 from server import db
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
@@ -6,8 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
-current_date = datetime.utcnow().date()
-current_time = datetime.utcnow().time()
+
 
 class UserModel(db.Model):
 
@@ -60,19 +60,27 @@ class UserModel(db.Model):
 
         return {"message": message, "status": status}
 
-    # Liste des réservation d'un utilisateur
 
+    def get_current_date_and_time(self):
+        tz_cotonou = pytz.timezone('Africa/Porto-Novo')
+        current_date = datetime.now(tz_cotonou).date()
+        current_time = datetime.now(tz_cotonou).time()
+
+        return current_date, current_time
 
     def R_traitement(self):
 
+        current_date, current_time = self.get_current_date_and_time()
         return [reservation for reservation in self.reservations if reservation.date > current_date or (reservation.date == current_date and reservation.heure_deb > current_time )]
 
     def R_expirer(self):
 
+        current_date, current_time = self.get_current_date_and_time()
         return [reservation for reservation in self.reservations if reservation.date < current_date or (reservation.date == current_date and reservation.heure_fin < current_time)]
 
     def R_cours(self):
 
+        current_date, current_time = self.get_current_date_and_time()
         return [reservation for reservation in self.reservations if reservation.date == current_date and reservation.status == "Approuvée" and reservation.heure_deb <= current_time <= reservation.heure_fin ]
 
 

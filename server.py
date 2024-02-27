@@ -1,5 +1,6 @@
 import os
 import subprocess
+import pytz
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta, time
@@ -12,12 +13,14 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:1999@localhost:5432/flasktest"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+tz_cotonou = pytz.timezone('Africa/Porto-Novo')
 
 from Models import user as user_model, reservation as reservation_model, composant, composant_reservation
 
 
 @app.route("/")
 def index():
+
     return render_template('index.html')
 
 
@@ -111,6 +114,10 @@ def new_reservations():
 @app.route("/user/reservations", methods=['GET'])
 @login_required
 def reservations():
+    tz_cotonou = pytz.timezone('Africa/Porto-Novo')
+    current_date = datetime.now(tz_cotonou).date()
+    current_time = datetime.now(tz_cotonou).strftime('%H:%M:%S')
+
     login_user = user_model.UserModel.query.filter_by(id=session['user_id']).first()
 
     traitement =login_user.R_traitement()
@@ -118,13 +125,16 @@ def reservations():
     en_cour= login_user.R_cours()
 
 
-    return render_template('user/myReservations.html', traitement=traitement,expirer=expirer,en_cour=en_cour)
+    return render_template('user/myReservations.html', traitement=traitement,expirer=expirer,en_cour=en_cour, time_b=current_time,date_b=current_date)
 
 
 @app.route("/user/reservations/<int:id_reservation>", methods=['GET'])
 @login_required
 def reservation(id_reservation):
-    current_time = datetime.utcnow().time()
+
+    tz_cotonou = pytz.timezone('Africa/Porto-Novo')
+    current_time = datetime.now(tz_cotonou).time()
+
     reservation_info = reservation_model.ReservationModel.query.filter_by(id=id_reservation, id_user=session['user_id']).first()
     if reservation_info:
         return render_template('user/codeStream.html', data=reservation_info, heure=current_time)
