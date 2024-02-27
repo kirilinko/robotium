@@ -74,3 +74,14 @@ def admin_required(f):
             return redirect(url_for('index'))
         return f(*args, **kwargs)
     return decorated_function
+
+
+def is_login(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_type' in session and session.get('user_type') == 'admin':
+            return redirect(url_for('admin_reservations'))
+        elif 'user_type' in session and session.get('user_type') == 'user':
+            return redirect(url_for('reservations'))
+        return f(*args, **kwargs)
+    return decorated_function

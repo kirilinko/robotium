@@ -1,4 +1,5 @@
 from server import db
+from sqlalchemy import and_
 from datetime import datetime, timedelta, time
 from sqlalchemy.exc import IntegrityError
 
@@ -15,7 +16,6 @@ class ReservationModel(db.Model):
     status = db.Column(db.String())
     information = db.Column(db.String())
     id_user = db.Column(db.Integer, db.ForeignKey('users.id'))
-    composants_reservation = db.relationship('ComposantReservationModel', backref='reservation', lazy=True)
 
     @classmethod
     def approved_reservations(cls):
@@ -42,20 +42,35 @@ class ReservationModel(db.Model):
 
                 if self.titre and len(self.titre) > 5:
 
-                    try:
-                        db.session.add(self)
-                        db.session.commit()
-                        message = "Réservation éffectuée avec succès"
-                        status = True
 
-                    except IntegrityError as e:
-                        db.session.rollback()
-                        message = f"Un erreur liée  à l'intégrité de la base de donnée {e}"
-                        status = False
+                    existing_reservations = ReservationModel.query.filter(
+                        and_(
+                            ReservationModel.date == self.date,
+                            ReservationModel.heure_deb <= self.heure_deb.time(),
+                            ReservationModel.heure_fin > self.heure_deb.time()
+                        )
+                    ).all()
 
-                    except Exception as e:
-                        db.session.rollback()
-                        message = f" Une erreur est survenue lors de la création de la réservation {e}"
+                    print(existing_reservations)
+                    if not existing_reservations :
+
+                        try:
+                            db.session.add(self)
+                            db.session.commit()
+                            message = "Réservation éffectuée avec succès"
+                            status = True
+
+                        except IntegrityError as e:
+                            db.session.rollback()
+                            message = f"Un erreur liée  à l'intégrité de la base de donnée {e}"
+                            status = False
+
+                        except Exception as e:
+                            db.session.rollback()
+                            message = f" Une erreur est survenue lors de la création de la réservation {e}"
+                            status = False
+                    else:
+                        message = "Votre heure de début est comprise dans l'intervalle de temps d'une réservation prévue pour le même jours."
                         status = False
                 else:
                     message = "Le titre doit contenir au moin 5 caractères"

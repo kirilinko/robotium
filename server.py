@@ -4,7 +4,7 @@ import pytz
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta, time
-from utils import generate_frames, upload_image, login_required, admin_required
+from utils import generate_frames, upload_image, login_required, admin_required, is_login
 from flask import Flask, render_template, jsonify, request, Response, redirect, url_for, session
 
 app = Flask(__name__)
@@ -25,6 +25,7 @@ def index():
 
 
 @app.route("/inscription", methods=['POST', 'GET'])
+@is_login
 def sing_up():
     if request.method == 'POST':
         full_name = request.form.get('full_name')
@@ -41,6 +42,7 @@ def sing_up():
 
 
 @app.route("/connexion", methods=['POST', 'GET'])
+@is_login
 def sing_in():
     if request.method == 'POST':
 
@@ -182,26 +184,27 @@ def edit(id_reservation):
 
 @app.route('/send_code', methods=['POST'])
 def send_code():
-    code = request.data.decode('utf-8')
+    code = request.form['code']
     #code = request.json.get('code')
     now = datetime.now()
     file_name = now.strftime("%Y-%m-%d_%H-%M-%S")
-    file_path = f"{file_name}.ino"
+    file_path = f"doc\doc.ino"
 
     with open(file_path, 'w') as file:
         file.write(code)
 
     sketch_path = os.path.join(os.getcwd(), file_path)
-
+    print(sketch_path)
     try:
-        subprocess.run(['arduino-cli', 'compile', '--upload', sketch_path, '--port', 'COM6', '--fqbn',
-                        'arduino:avr:uno'], check=True)
+        subprocess.run(['arduino-cli', 'compile', '--upload', file_path, '--port', 'COM6', '--fqbn',
+                        'arduino:avr:uno'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         return jsonify({"message": "Execution du code", "status": True}), 200
     except subprocess.CalledProcessError as e:
-        error_message = e.stderr.decode() if e.stderr else 'Erreur sans sortie d\'erreur'
-        return jsonify({"message": "Erreur lors de la soumission du code "+ error_message, "status": False}), 500
+        error_message = e.stderr if e.stderr else 'Erreur sans sortie d\'erreur'
+        return jsonify({"message": "Erreur : "+ error_message, "status": False}), 500
     finally:
-        os.remove(sketch_path)
+        #os.remove(sketch_path)
+        pass
 
 @app.route('/video')
 #@login_required
