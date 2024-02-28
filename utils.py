@@ -10,36 +10,6 @@ def allowed_file(filename):
     return '.' in filename and filename.split('.')[-1].lower() in allowed_extensions
 
 
-def upload_image(file):
-
-    FILE_SIZE = 2 * 1024 * 1024
-
-    if file.filename and allowed_file(file.filename):
-
-        if file.content_length < FILE_SIZE:
-
-            filename = secure_filename(file.filename)
-            filepath = os.path.join('Fichiers', filename)
-
-            file.save(filepath)
-
-            message = "Image correctement uploader"
-            status = True
-            path = filepath
-
-        else:
-            message = "Le poids de l'image ne doit pas être supérieur à 2Mo"
-            status = False
-            path = None
-
-    else:
-        message = "Vous devez ajouter une image"
-        status = False
-        path = None
-
-    return {"message": message, "status": status, "path": path}
-
-
 def generate_frames():
     camera = cv2.VideoCapture(0)
 

@@ -4,7 +4,7 @@ import pytz
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta, time
-from utils import generate_frames, upload_image, login_required, admin_required, is_login
+from utils import generate_frames, login_required, admin_required, is_login
 from flask import Flask, render_template, jsonify, request, Response, redirect, url_for, session
 
 app = Flask(__name__)
@@ -186,7 +186,6 @@ def edit(id_reservation):
 def send_code():
     code = request.form['code']
     now = datetime.now()
-    file_name = now.strftime("%Y-%m-%d_%H-%M-%S")
     file_path = f"doc\doc.ino"
 
     with open(file_path, 'w') as file:
@@ -202,7 +201,7 @@ def send_code():
         error_message = e.stderr if e.stderr else 'Erreur sans sortie d\'erreur'
         return jsonify({"message": "Erreur : "+ error_message, "status": False}), 500
     finally:
-        #os.remove(sketch_path)
+        os.remove(sketch_path)
         pass
 
 @app.route('/video')
