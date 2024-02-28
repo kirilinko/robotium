@@ -49,7 +49,7 @@ class ReservationModel(db.Model):
                         )
                     ).all()
 
-                    print(existing_reservations)
+
                     if not existing_reservations :
 
                         try:

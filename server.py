@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 tz_cotonou = pytz.timezone('Africa/Porto-Novo')
 
-from Models import user as user_model, reservation as reservation_model, composant, composant_reservation
+from Models import user as user_model, reservation as reservation_model
 
 
 @app.route("/")
@@ -185,7 +185,6 @@ def edit(id_reservation):
 @app.route('/send_code', methods=['POST'])
 def send_code():
     code = request.form['code']
-    #code = request.json.get('code')
     now = datetime.now()
     file_name = now.strftime("%Y-%m-%d_%H-%M-%S")
     file_path = f"doc\doc.ino"
