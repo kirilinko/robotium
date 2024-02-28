@@ -12,9 +12,7 @@ class ReservationModel(db.Model):
     heure_fin = db.Column(db.Time)
     titre = db.Column(db.String())
     descriptions = db.Column(db.String())
-    schemas_board = db.Column(db.String())
     status = db.Column(db.String())
-    information = db.Column(db.String())
     id_user = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     @classmethod
