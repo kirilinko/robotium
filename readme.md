@@ -1,18 +1,29 @@
-Le projet Robotarium a été réalisé avec le framework minimaliste Flask donc python. Comme SGBD, nous avions opté pour PostgreSQL.
+# Dev Documentation
+The Robotarium project was created using the minimalist Flask framework, i.e. Python. As DBMS, we opted for PostgreSQL.
 
-Prérequis
-Avoir python installé 
-Avoir installé PostgreSQL
-Avoir les drivers de reconnaissances des plaquettes Arduino installé sur la machine
+## Prerequisites
+python installed 
+PostgreSQL installed
+Arduino board recognition drivers installed on the machine
 
-Processus d’installation
-L'ensemble des différents modules utilisés pour la réalisation de cette application sont tous référencés dans le fichier "requirement.txt"
+## Installation process
+All the modules used to create this application are referenced in the "requirement.txt" file.
 
-Une fois que vous aurez créé votre environnement virtuel, vous pouvez exécuter la commande : 
- " pip install -r requirement.txt " pour installer les modules.
- Une fois cela fait, vous pouvez exécuter :
-" pip freeze " afin de voir si les modules ont correctement été installés
+Once you've created your virtual environment, you can run the command : <br/>
+ `pip install -r requirement.txt` to install the modules. <br/>
+ Once this has been done, you can run : <br/>
+ `pip freeze` to see if the modules have been correctly installed.
 
-Par la suite, vous devez installer Arduino CLI en suivant les instructions se trouvant sur :
+Next, you need to install Arduino CLI by following the instructions on :
 https://arduino.github.io/arduino-cli/0.35/installation/ 
-Une fois téléchargé, vous devez déplacer l'exécutable "arduino-cli.exe" dans le dossier du projet comme ceci :
+Once downloaded, you need to move the "arduino-cli.exe" executable into the project folder like this:
+
+Once you've done all this, you can move on to the PostgreSQL DBMS. 
+Create a **flaskapp** database 
+Return to your virtual environment and enter the following commands: <br/> 
+` $env:FLASK_APP="server.py" ` <br/>
+`flask db init` <br/>
+`flask db migrat` <br/>
+`flask db update` <br/>
+Finally, you can run the application by doing : <br/>
+`flask run --host=0.0.0.0`
