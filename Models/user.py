@@ -24,7 +24,7 @@ class UserModel(db.Model):
 
         if self.email and self.validate_email(self.email):
 
-            if self.full_name and 3 < len(self.full_name) < 16:
+            if self.full_name and 3 < len(self.full_name) < 51:
 
                 if self.password and len(self.password) >= 4:
 

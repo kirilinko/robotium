@@ -8,7 +8,7 @@
 
          <div role="tablist" class="tabs tabs-bordered w-full">
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold " aria-label="En traitement" style="width: 250px;" checked />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold " aria-label="En traitement " style="width: 250px;" checked />
 
             <div role="tabpanel" class="tab-content p-10">
             {% if traitement %}
@@ -38,7 +38,7 @@
 
             </div>
 
-            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" style="width: 250px;" aria-label=" En cours"  />
+            <input type="radio" name="my_tabs_1" role="tab" class="tab text-xl font-bold" style="width: 250px;" aria-label=" En cours ({{ en_cour | length }})"  />
 
             <div role="tabpanel" class="tab-content p-10">
 

@@ -10,7 +10,7 @@ from flask import Flask, render_template, jsonify, request, Response, redirect, 
 app = Flask(__name__)
 app.secret_key = 'Franck2024'
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:1999@localhost:5432/flasktest"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:1999@localhost:5432/flaskapp"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 tz_cotonou = pytz.timezone('Africa/Porto-Novo')
@@ -102,7 +102,7 @@ def new_reservations():
 
         if result['status'] is True:
 
-            new_reservation = reservation_model.ReservationModel(date=result['date_reservation'], heure_deb=result['heure_deb'], heure_fin=result['heure_fin'], titre=titre, descriptions=descriptions, schemas_board=" ", status="En revue", information="")
+            new_reservation = reservation_model.ReservationModel(date=result['date_reservation'], heure_deb=result['heure_deb'], heure_fin=result['heure_fin'], titre=titre, descriptions=descriptions, status="En revue")
             result = new_reservation.create(session['user_id'])
 
             if result['status'] is True:
@@ -185,8 +185,7 @@ def edit(id_reservation):
 @app.route('/send_code', methods=['POST'])
 def send_code():
     code = request.form['code']
-    now = datetime.now()
-    file_path = f"doc\doc.ino"
+    file_path = f"doc\\doc.ino"
 
     with open(file_path, 'w') as file:
         file.write(code)
