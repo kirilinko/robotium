@@ -23,7 +23,7 @@ Create a **flaskapp** database
 Return to your virtual environment and enter the following commands: <br/> 
 ` $env:FLASK_APP="server.py" ` <br/>
 `flask db init` <br/>
-`flask db migrat` <br/>
-`flask db update` <br/>
+`flask db migrate` <br/>
+`flask db upgrade` <br/>
 Finally, you can run the application by doing : <br/>
 `flask run --host=0.0.0.0`
